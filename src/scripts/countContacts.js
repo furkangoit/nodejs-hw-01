@@ -10,7 +10,6 @@ export const countContacts = async () => {
   }
 };
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-  const total = await countContacts();
-  console.log(`Toplam kontak sayısı: ${total}`);
-}
+// Execute when run directly
+const total = await countContacts();
+console.log(`Toplam kontak sayısı: ${total}`);

@@ -10,19 +10,18 @@ export const getAllContacts = async () => {
   }
 };
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-  const contacts = await getAllContacts();
+// Execute when run directly
+const contacts = await getAllContacts();
 
-  if (contacts.length === 0) {
-    console.log(' Rehber boş!');
-  } else {
-    console.log(' Tüm kontaklar:');
-    contacts.forEach((contact, index) => {
-      console.log(
-        `${index + 1}. ${contact.name} | ${contact.phone} | ${
-          contact.email
-        } | ${contact.job}`,
-      );
-    });
-  }
+if (contacts.length === 0) {
+  console.log(' Rehber boş!');
+} else {
+  console.log(' Tüm kontaklar:');
+  contacts.forEach((contact, index) => {
+    console.log(
+      `${index + 1}. ${contact.name} | ${contact.phone} | ${
+        contact.email
+      } | ${contact.job}`,
+    );
+  });
 }

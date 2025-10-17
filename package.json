@@ -1,11 +1,17 @@
 {
   "name": "nodejs-hw-01",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "get-all": "node src/scripts/getAllContacts.js",
+    "generate": "node src/scripts/generateContacts.js",
+    "add-one": "node src/scripts/addOneContact.js",
+    "count": "node src/scripts/countContacts.js",
+    "remove-last": "node src/scripts/removeLastContact.js"
   },
   "keywords": [],
   "author": "",

@@ -21,6 +21,5 @@ export const removeLastContact = async () => {
   }
 };
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-  await removeLastContact();
-}
+// Execute when run directly
+await removeLastContact();

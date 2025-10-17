@@ -19,6 +19,5 @@ export const addOneContact = async () => {
   }
 };
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-  await addOneContact();
-}
+// Execute when run directly
+await addOneContact();

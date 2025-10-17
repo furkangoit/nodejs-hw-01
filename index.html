@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacts Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .controls {
+            padding: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #11998e, #38ef7d);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #fc466b, #3f5efb);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .contacts-section {
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .contact-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .contact-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .contact-info {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .contact-info div {
+            margin-bottom: 5px;
+        }
+
+        .contact-info i {
+            width: 20px;
+            color: #4facfe;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .error {
+            background: #ffe6e6;
+            color: #d63031;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .success {
+            background: #e6ffe6;
+            color: #00b894;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .contacts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 Contact Manager</h1>
+            <p>Kişi rehberi yönetim sistemi</p>
+            <div class="stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="contactCount">-</span>
+                    <span>Toplam Kişi</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="loadContacts()">
+                🔄 Kişileri Yükle
+            </button>
+            <button class="btn btn-success" onclick="generateContacts()">
+                ✨ Rastgele Kişi Oluştur
+            </button>
+            <button class="btn btn-warning" onclick="addOneContact()">
+                ➕ Tek Kişi Ekle
+            </button>
+            <button class="btn btn-danger" onclick="removeLastContact()">
+                🗑️ Son Kişiyi Sil
+            </button>
+        </div>
+
+        <div class="contacts-section">
+            <h2 class="section-title">Kişi Listesi</h2>
+            <div id="contactsList">
+                <div class="loading">Kişiler yükleniyor...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isLoading = false;
+
+        // Sayfa yüklendiğinde kişileri yükle
+        document.addEventListener('DOMContentLoaded', () => {
+            loadContacts();
+        });
+
+        async function showMessage(message, type = 'success') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type;
+            messageDiv.textContent = message;
+            
+            const container = document.querySelector('.container');
+            container.insertBefore(messageDiv, container.firstChild);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+        }
+
+        async function runScript(scriptName, successMessage) {
+            if (isLoading) return;
+            
+            isLoading = true;
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(btn => btn.disabled = true);
+
+            try {
+                const response = await fetch(`/api/${scriptName}`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    await showMessage(successMessage);
+                    await loadContacts();
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                console.error('Hata:', error);
+                await showMessage(`İşlem başarısız: ${error.message}`, 'error');
+            } finally {
+                isLoading = false;
+                buttons.forEach(btn => btn.disabled = false);
+            }
+        }
+
+        async function loadContacts() {
+            const contactsList = document.getElementById('contactsList');
+            const contactCount = document.getElementById('contactCount');
+            
+            contactsList.innerHTML = '<div class="loading">Kişiler yükleniyor...</div>';
+            
+            try {
+                const response = await fetch('/api/contacts');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const contacts = await response.json();
+                contactCount.textContent = contacts.length;
+                
+                if (contacts.length === 0) {
+                    contactsList.innerHTML = '<div class="loading">Henüz kişi yok. Yeni kişiler ekleyin!</div>';
+                    return;
+                }
+
+                const contactsHTML = contacts.map((contact, index) => `
+                    <div class="contact-card">
+                        <div class="contact-name">${contact.name}</div>
+                        <div class="contact-info">
+                            <div><i>📞</i> ${contact.phone}</div>
+                            <div><i>📧</i> ${contact.email}</div>
+                            <div><i>💼</i> ${contact.job}</div>
+                        </div>
+                    </div>
+                `).join('');
+
+                contactsList.innerHTML = `<div class="contacts-grid">${contactsHTML}</div>`;
+                
+            } catch (error) {
+                console.error('Kişiler yüklenirken hata:', error);
+                contactsList.innerHTML = '<div class="error">Kişiler yüklenirken hata oluştu!</div>';
+                contactCount.textContent = '?';
+            }
+        }
+
+        async function generateContacts() {
+            await runScript('generate', 'Yeni kişiler başarıyla oluşturuldu!');
+        }
+
+        async function addOneContact() {
+            await runScript('add-one', 'Yeni kişi başarıyla eklendi!');
+        }
+
+        async function removeLastContact() {
+            await runScript('remove-last', 'Son kişi başarıyla silindi!');
+        }
+    </script>
+</body>
+</html>
